@@ -1,0 +1,171 @@
+    public static VBox testVBox1Titles(Stage stage) {
+        VBox vbox = new VBox(9);
+        stage.setTitle("testVBox1Titles");
+        vbox.setPadding(new Insets(10));
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        Text mp3FileNameT, trackNoT, titleT, artistsT, lengthT, albumT, yearT, genreT, commentsT;
+
+        mp3FileNameT = new Text("Filename:");
+        trackNoT = new Text("Track Number:");
+        titleT = new Text("Title:");
+        artistsT = new Text("Artists:");
+        lengthT = new Text("Track Length:");
+        albumT = new Text("Album:");
+        yearT = new Text("Year:");
+        genreT = new Text("Genere:");
+        commentsT = new Text("Comments/Lyrics: ");
+        vbox.getChildren().addAll(mp3FileNameT, trackNoT, titleT, artistsT, lengthT, albumT, yearT, genreT, commentsT);
+        Scene scene = new Scene(vbox);
+        stage.setScene(scene);
+        return vbox;
+    }
+    public static VBox testVBox2Values(Stage stage) {
+        VBox vbox = new VBox(9);
+        stage.setTitle("testVBox2Values");
+        vbox.setPadding(new Insets(10));
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        TextField mp3FileNameTF, trackNoTF, titleTF, artistsTF, lengthTF, albumTF, yearTF, genreTF;
+        TextArea commentTF;
+
+        mp3FileNameTF = new TextField("");
+        trackNoTF = new TextField("");
+        titleTF = new TextField("");
+        artistsTF = new TextField("");
+        lengthTF = new TextField("");
+        albumTF = new TextField("");
+        yearTF = new TextField("");
+        genreTF = new TextField("");
+        commentTF = new TextArea("");
+        vbox.getChildren().addAll(mp3FileNameTF, trackNoTF, titleTF, artistsTF, lengthTF, albumTF, yearTF, genreTF, commentTF);
+
+        Scene scene = new Scene(vbox);
+        stage.setScene(scene);
+        return vbox;
+    }
+
+  public static void theGrid(Stage stage) {
+        GridPane grid = new GridPane();
+        grid.setHgap(8);
+        grid.setVgap(8);
+        grid.setPadding(new Insets(5));
+
+        ColumnConstraints colConstraint1 = new ColumnConstraints();
+        colConstraint1.setHgrow(Priority.NEVER);
+        grid.getColumnConstraints().add(colConstraint1);
+
+        ColumnConstraints colConstraint2 = new ColumnConstraints();
+        colConstraint2.setHgrow(Priority.ALWAYS);
+
+        grid.getColumnConstraints().addAll(colConstraint1, colConstraint2);
+
+        RowConstraints rowConstraint1 = new RowConstraints();
+        rowConstraint1.setVgrow(Priority.NEVER);
+
+        RowConstraints rowConstraint2 = new RowConstraints();
+        rowConstraint2.setVgrow(Priority.ALWAYS);
+
+        grid.getRowConstraints().addAll(rowConstraint1, rowConstraint2);
+
+        Label lbl = new Label("Name:");
+        TextField field = new TextField();
+        ListView view = new ListView();
+        Button okBtn = new Button("OK");
+        Button closeBtn = new Button("Close");
+
+        GridPane.setHalignment(okBtn, HPos.RIGHT);
+
+        grid.add(lbl, 0, 0);
+        grid.add(field, 1, 0, 3, 1);
+        grid.add(view, 0, 1, 4, 2);
+        grid.add(okBtn, 2, 3);
+        grid.add(closeBtn, 3, 3);
+
+        Scene scene = new Scene(grid, 280, 300);
+
+        stage.setTitle("Grid Test");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+        titleT.setText("Track Title:");
+        subtitleT.setText("Subtitle:");
+        ratingT.setText("Rating:");
+        tagsT.setText("Tags:");
+        commentsT.setText("Comments/Lyrics: ");
+        contributingArtistsT.setText("Contributing Artists:");
+        albumArtistT.setText("Album Artist: ");
+        yearT.setText("Year:");
+        trackNoT.setText("Track Number:");
+        genereT.setText("Genere:");
+        lengthT.setText("Track Length:");
+
+        window = primaryStage;
+        window.setTitle("Music Mohawk!");
+
+        StackPane stackPaneLayout = new StackPane();
+        stackPaneLayout.getChildren().addAll(button2, button);
+        Scene scene = new Scene(stackPaneLayout, 400, 500);
+        button.setOnAction(e -> System.out.println("hey now brown cow"));
+        button2.setOnAction(this);
+        window.show();*/
+
+        
+        
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+    }
+
+    @Override
+    public void handle(ActionEvent event) {
+
+    }
+}
+
+/*
+        
+ GridPane grid = new GridPane();
+ grid.setAlignment(Pos.CENTER);
+ grid.setHgap(10);
+ grid.setVgap(10);
+ grid.setPadding(new Insets(25, 25, 25, 25));
+ Scene scene = new Scene(grid, 850, 600);
+        
+ Button btn = new Button();
+ btn.setText("Say 'Hello World'");
+ btn.setOnAction(new EventHandler<ActionEvent>() {
+            
+ @Override
+ public void handle(ActionEvent event) {
+ System.out.println("Hello World!");
+ }
+ });
+        
+ StackPane root = new StackPane();
+ root.getChildren().add(btn);*/
+
+
+    Stage mainWindow;
+    Button save, reset, webTool, exit;
+    Text titleT, subtitleT, ratingT, tagsT, commentsT, contributingArtistsT, albumArtistT, albumT, yearT, trackNoT, genereT, lengthT;
+    TextField titleTF, subtitleTF, ratingTF, tagsTF, contributingArtistsTF, albumArtistTF, albumTF, yearTF, trackNoTF, genereTF, lengthTF;
+    TextArea commentTF;
+
+
+
+/*public void start(Stage primaryStage) {
+     try {
+     //testVBox1Titles(primaryStage);
+     //testVBox2Values(primaryStage);
+     grid(primaryStage);
+     } catch (UnsupportedOperationException e) {
+     System.err.println(e.toString());
+     }
+     //To change body of generated methods, choose Tools | Templates.
+     }*/

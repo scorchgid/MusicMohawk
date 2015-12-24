@@ -28,7 +28,9 @@ public class TestMainNonApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        outputTestFileScan();
+        //outputTestFileScan();
+        //testListRoots();
+        stackOverflowFileMp3Scan(new File("D:\\"));
     }
 
     public static void testListRoots() {

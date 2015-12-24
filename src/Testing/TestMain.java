@@ -17,26 +17,32 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-//import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileUtils;
 
+//import org.apache.commons.io.FileUtils;
 /**
  * This File is just for test scraps and can be ignored
  *
@@ -49,30 +55,42 @@ public class TestMain extends Application {
      */
     public static void main(String[] args) {
         // Tests calls go here
+        //launch(args);
+        //testGetListOfMP3Files();
+        //testCDrive();
+
         launch(args);
     }
 
-    public static void testGetListOfMP3Files() {
-        String[] files;
-        files = getListOfMP3Files();
-        for (String file : files) {
-            System.out.println(file);
+    public static void testCDrive() {
+//        DirectoryStream directoryStream(directoryStream);
+        File cDrive = new File("D:\\");
+        File[] drives = File.listRoots();
+
+        for (File drive : drives) {
+            for (File rootDirectory : drives) {
+                File directory = new File(rootDirectory.getPath());
+                System.out.println("PATH: " + directory.toString());
+            }
         }
+    }
+
+    public static String[] testGetListOfMP3Files() {
+
+        File rootDirectory = new File("D:\\");
+        File directory = new File(rootDirectory.getPath());
+        System.out.println(rootDirectory.getPath());
+        return directory.list((File directory1, String filename) -> filename.endsWith(".mp3"));
     }
 
     public static String[] getListOfMP3Files() {
         //List<String> listOfFiles = new ArrayList<>();
-        //1.
-        File[] drives = File.listRoots();
         // C:\ D:\
-
-        // none of this works
-        // why does it fail??? it just crashes after one attempt
-        // needs to run recursivly down each folder
+        File[] drives = File.listRoots();
+        // none of this works, Why does it fail??? it just crashes after one attempt, Needs to run recursivly down each folder,recursive
         for (File rootDirectory : drives) {
-            //recursive
-
             File directory = new File(rootDirectory.getPath());
+            System.out.println(rootDirectory.getPath());
             return directory.list(new FilenameFilter() {
                 public boolean accept(File directory, String filename) {
                     return filename.endsWith(".mp3");
@@ -234,32 +252,190 @@ public class TestMain extends Application {
         stage.show();
     }
 
-    public static void treeSample(Stage stage) {
+    public static Collection hyperStackOverflowFileMp3Scan(File root) {
+        String fileName = ".mp3";
+        try {
+            boolean recursive = true;
+            Collection files = FileUtils.listFiles(root, null, recursive);
+            for (Iterator iterator = files.iterator(); iterator.hasNext();) {
+                File file = (File) iterator.next();
+                if (file.getName().endsWith(fileName)) {
+                    System.out.println(file.toString());
+                    file.getAbsolutePath();
+                }
+            }
+            return files;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
-        TreeItem<String> rootItem = new TreeItem<String>("Inbox");
+    public static List<File> hyperAVAJAVAFileMp3Scan(File root, TreeItem<File> parent) {
+        try {
+            TreeItem<File> treeRoot = new TreeItem<>(root);
+            String[] extensions = new String[]{"mp3"};
+            root.getCanonicalPath();
+            List<File> returnedFiles = new LinkedList<File>();
+            List<File> files = (List<File>) FileUtils.listFiles(root, extensions, true);
+            for (File file : files) {
+                if (!file.toString().contains("$RECYCLE.BIN")) {
+                    System.out.println(file.toString());
+                    returnedFiles.add(file.getCanonicalFile());
+                }
+            }
+            return returnedFiles;
+        } catch (IOException ex) {
+            Logger.getLogger(TestMain.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public static void treeSample(Stage stage, Collection root) {
+        TreeItem<String> rootItem = new TreeItem<String>("D:\\");
+
         rootItem.setExpanded(true);
-        for (int i = 1; i < 6; i++) {
-            TreeItem<String> item = new TreeItem<String>("Message" + i);
+
+        for (Iterator it = root.iterator(); it.hasNext();) {
+            Object i = it.next();
+            TreeItem<String> item = new TreeItem<String>(i.toString());
             rootItem.getChildren().add(item);
         }
+        /*
+         for (int i = 1; i < 6; i++) {
+         TreeItem<String> item = new TreeItem<String>("Message" + i);
+         rootItem.getChildren().add(item);
+         }*/
         TreeView<String> tree = new TreeView<String>(rootItem);
-        StackPane root = new StackPane();
-        root.getChildren().add(tree);
-        stage.setScene(new Scene(root, 300, 250));
+        StackPane rootpane = new StackPane();
+        rootpane.getChildren().add(tree);
+        stage.setScene(new Scene(rootpane, 300, 250));
         stage.show();
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            //testVBox1Titles(primaryStage);
-            //testVBox2Values(primaryStage);
-            //grid(primaryStage);
-            treeSample(primaryStage);
+    // private TreeView<File> treeViewFile = new TreeView<>();
+    /*
+     File drr = new File("/usrs");
+     File[] fil = drr.listFiles(new FilenameFilter() {
 
-        } catch (UnsupportedOperationException e) {
-            System.err.println(e.toString());
+     public boolean accept(File dii, String name) {
+     return name.toLowerCase().endsWith(".mp3");
+     }
+     });
+     */
+    private void fileFinder(File dir, TreeItem<File> parent) throws IOException {
+        String[] extensions = new String[]{"mp3"};
+        TreeItem<File> root = new TreeItem<>(dir);
+        root.setExpanded(true);
+        dir.getCanonicalPath();
+
+        List<File> files = (List<File>) FileUtils.listFiles(dir, extensions, true);
+        //Collection collector = hyperStackOverflowFileMp3Scan(dir);
+        //File[] files = null;
+        //collector.toArray(files);
+
+        for (File file : files) {
+            if (!file.toString().contains("$RECYCLE.BIN")) {
+                if (file.isDirectory()) {
+                    System.out.println("directory:" + file.getCanonicalPath());
+                    fileFinder(file, root);
+                } else {
+                    System.out.println("    file:" + file.getCanonicalPath());
+                    root.getChildren().add(new TreeItem<>(file));
+                }
+            }
         }
-        //To change body of generated methods, choose Tools | Templates.
+        if (parent == null) {
+            //treeViewFile.setRoot(root);
+        } else {
+            parent.getChildren().add(root);
+        }
     }
+    //http://stackoverflow.com/questions/26690247/how-to-make-directories-expandable-in-javafx-treeview
+
+    private TreeItem<File> createNode(final File f) {
+        return new TreeItem<File>(f) {
+            private boolean isLeaf;
+            private boolean isFirstTimeChildren = true;
+            private boolean isFirstTimeLeaf = true;
+
+            @Override
+            public ObservableList<TreeItem<File>> getChildren() {
+                if (isFirstTimeChildren) {
+                    isFirstTimeChildren = false;
+                    super.getChildren().setAll(buildChildren(this));
+                }
+                return super.getChildren();
+            }
+
+            @Override
+            public boolean isLeaf() {
+                if (isFirstTimeLeaf) {
+                    isFirstTimeLeaf = false;
+                    File f = (File) getValue();
+                    isLeaf = f.isFile();
+                }
+                return isLeaf;
+            }
+
+            private ObservableList<TreeItem<File>> buildChildren(
+                    TreeItem<File> TreeItem) {
+                File f = TreeItem.getValue();
+                if (f == null) {
+                    return FXCollections.emptyObservableList();
+                }
+                if (f.isFile()) {
+                    return FXCollections.emptyObservableList();
+                }
+                File[] files = f.listFiles();
+                if (files != null) {
+                    ObservableList<TreeItem<File>> children = FXCollections
+                            .observableArrayList();
+                    for (File childFile : files) {
+                        children.add(createNode(childFile));
+                    }
+                    return children;
+                }
+                return FXCollections.emptyObservableList();
+            }
+        };
+    }
+
+    @Override
+    public void start(Stage stage) {
+        Scene scene = new Scene(new Group(), 300, 300);
+        VBox vbox = new VBox();
+
+        TreeItem<File> root = createNode(new File("c:/"));
+        TreeView treeView = new TreeView<File>(root);
+
+        vbox.getChildren().add(treeView);
+        ((Group) scene.getRoot()).getChildren().add(vbox);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
 }
+
+/*    @Override
+ public void start(Stage primaryStage) {
+ try {
+ //testVBox1Titles(primaryStage);
+ //testVBox2Values(primaryStage);
+ //grid(primaryStage);
+ String selectedSample = "D:\\K3NoteBackup\\SD Card\\Music\\Gaming\\Ace Attorney";
+ String sampleRootDirectory = "D:\\";
+ fileFinder(new File(selectedSample), null);
+ StackPane stackPane = new StackPane();
+ stackPane.getChildren().add(treeViewFile);
+ primaryStage.setScene(new Scene(stackPane, 300, 250));
+ primaryStage.show();
+ //TreeItem<File> parent = new TreeItem<>();
+ //Collection collect = hyperAVAJAVAFileMp3Scan(new File(sampleRootDirectory), parent);
+
+ //treeSample(primaryStage, collect);
+ } catch (UnsupportedOperationException | IOException e) {
+ System.err.println(e.toString());
+ }
+ //To change body of generated methods, choose Tools | Templates.
+ }}*/

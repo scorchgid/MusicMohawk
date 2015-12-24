@@ -154,7 +154,7 @@ public class MusicDataView {
         this.commentsTF = commentsTF;
     }
 
-    public Scene grid() {
+    public GridPane grid() {
         GridPane grid = new GridPane();
         grid.setHgap(8);
         grid.setVgap(8);
@@ -182,6 +182,7 @@ public class MusicDataView {
         genreTF = new TextField(musicDataModel.getGenre());
         commentsTF = new TextArea(musicDataModel.getComment());
 
+        openButton = new Button("Open");
         saveButton = new Button("Save");
         resetButton = new Button("Reset");
         webAutoFillButton = new Button("Web Autofill");
@@ -194,7 +195,19 @@ public class MusicDataView {
         resetButton.setPrefWidth(100);
         webAutoFillButton.setPrefWidth(100);
         exitButton.setPrefWidth(100);
-        openButton = new Button("Open");
+
+        saveButton.setOnMouseClicked(f -> {
+            //musicDataModel.setmP3FileName(mp3FileNameTF.toString());
+            musicDataModel.setTrack(trackNoTF.getText());
+            musicDataModel.setTitle(titleTF.getText());
+            musicDataModel.setArtist(artistsTF.getText());
+            //musicDataModel.setLength(Long.getLong(lengthTF.getText()));
+            musicDataModel.setAlbum(albumTF.getText());
+            musicDataModel.setYear(yearTF.getText());
+            musicDataModel.setGenre((genreTF.getText()));
+            musicDataModel.setComment(commentsTF.getText());
+            musicDataModel.MP3SaveFile();
+        });
 
         openButton.setOnMouseClicked(e -> {
 
@@ -265,6 +278,6 @@ public class MusicDataView {
         grid.addColumn(1, mp3FileNameTF, trackNoTF, titleTF, artistsTF, lengthTF, albumTF, yearTF, genreTF, commentsTF, hbox);
         grid.setAlignment(Pos.TOP_LEFT);
         Scene scene = new Scene(grid, 500, 500);
-        return scene;
+        return grid;
     }
 }

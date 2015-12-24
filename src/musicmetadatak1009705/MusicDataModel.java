@@ -128,20 +128,8 @@ public class MusicDataModel {
         System.out.println("Load 1");
         mp3file = new Mp3File(fileName);
         mP3FileName = fileName;
-        if (mp3file.hasId3v1Tag()) {
-            System.out.println("Load 2 IDv31Tag");
-            ID3v1 id3v1Tag = mp3file.getId3v1Tag();
-            track = id3v1Tag.getTrack();
-            title = id3v1Tag.getTitle();
-            artist = id3v1Tag.getArtist();
-            length = mp3file.getLength();
-            album = id3v1Tag.getAlbum();
-            year = id3v1Tag.getYear();
-            genre = id3v1Tag.getGenreDescription();
-            comment = id3v1Tag.getComment();
-            System.out.println("Load 2 ID3v1Tag END");
 
-        } /*Fail safe*/ else if (mp3file.hasId3v2Tag()) {
+        if (mp3file.hasId3v2Tag()) {
             System.out.println("Load 2 ID3v2Tag");
             ID3v2 id3v2Tag = mp3file.getId3v2Tag();
             track = id3v2Tag.getTrack();
@@ -153,6 +141,19 @@ public class MusicDataModel {
             genre = id3v2Tag.getGenreDescription();
             comment = id3v2Tag.getComment();
             System.out.println("Load 2 ID3v2Tag END");
+            /*Fail safe*/
+        } else if (mp3file.hasId3v1Tag()) {
+            System.out.println("Load 2 IDv31Tag");
+            ID3v1 id3v1Tag = mp3file.getId3v1Tag();
+            track = id3v1Tag.getTrack();
+            title = id3v1Tag.getTitle();
+            artist = id3v1Tag.getArtist();
+            length = mp3file.getLength();
+            album = id3v1Tag.getAlbum();
+            year = id3v1Tag.getYear();
+            genre = id3v1Tag.getGenreDescription();
+            comment = id3v1Tag.getComment();
+            System.out.println("Load 2 ID3v1Tag END");
         } else {
             System.err.println("Error: file did not contain a valid ID3V#Tag");
         }
@@ -163,13 +164,16 @@ public class MusicDataModel {
      *
      * @return False if file failed to save
      */
-    public boolean MP3SaveFile() {
+    public void MP3SaveFile() {
         try {
+            System.out.println("Attemping Save");
             mp3file.save(mP3FileName);
+            System.out.println("Save complete " + mp3file.getFilename());
         } catch (IOException | NotSupportedException ex) {
             Logger.getLogger(MusicDataModel.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+            System.err.println("Save Failed");
+            //return false;
         }
-        return true;
+        //return true;
     }
 }

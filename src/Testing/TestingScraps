@@ -169,3 +169,97 @@
      }
      //To change body of generated methods, choose Tools | Templates.
      }*/
+
+---------------------------------------------------------------------------------------------------------------
+
+    private void oldeTreeViewLoad(File dir, TreeItem<File> parent) throws IOException {
+        
+        System.out.println(dir.getAbsoluteFile());
+        
+        IOFileFilter fileFilter = new SuffixFileFilter(".mp3");
+        
+        List<File> files = (List<File>) FileUtils.listFilesAndDirs(dir, fileFilter, null);
+        oldeTreeSysScan(files, parent);
+    }
+    int errorCatchCount = 0;
+    private void oldeTreeSysScan(List<File> files, TreeItem<File> parent) throws IOException {
+        
+        for (File file : files) {
+            if (!file.toString().contains("$RECYCLE.BIN")) {
+                if (file.isDirectory()) {
+                    //System.out.println("directory:" + file.getCanonicalPath());
+                    oldeTreeViewLoad(file, root);
+                } else {
+                    //System.out.println(" file:" + file.getCanonicalPath());
+                    root.getChildren().add(new TreeItem<>(file));
+                }
+            }
+        }
+        if (parent == null) {
+            treeViewFile.setRoot(root);
+        } else {
+            parent.getChildren().add(root);
+        }
+    }
+
+    private void neoTreeViewLoad(File dir, TreeItem<File> parent) throws IOException {
+        dir.getCanonicalPath();
+        IOFileFilter fileFilter = new SuffixFileFilter(".mp3");
+        List<File> files = (List<File>) FileUtils.listFilesAndDirs(dir, fileFilter, null);
+        neoTreeSysScan(files, parent);
+    }
+
+    private void neoTreeSysScan(List<File> files, TreeItem<File> parent) throws IOException {
+        for (File file : files) {
+            if (!file.toString().contains("$RECYCLE.BIN")) {
+                if (file.toString().contains(".mp3")) {
+                    System.out.println("file: " + file.getAbsolutePath());
+                    root.getChildren().add(new TreeItem<File>(file));
+                } else if (file.isDirectory()) {
+                    System.out.println("directory:" + file.getAbsolutePath());
+                    neoTreeViewLoad(file, root);
+                } else {
+                    System.err.println("Tree Sys Scan catch");
+                    /* Just a check if the if loop falls through */
+                    errorCatchCount++;
+                    /*
+                     if (file.isDirectory()) {
+                     System.out.println("directory:" + file.getCanonicalPath());
+                     treeViewLoad(file, root);
+                     } else {
+                     System.out.println("    file:" + file.getCanonicalPath());
+                     root.getChildren().add(new TreeItem<>(file));
+                     }*/
+                }
+            }
+            if (parent == null) {
+                treeViewFile.setRoot(root);
+            } else {
+                parent.getChildren().add(root);
+            }
+            if (errorCatchCount > 0) {
+                System.err.println("Error catch count is " + errorCatchCount);
+            }
+        }
+    }
+
+    /*public StackPane treeStack() throws IOException {
+     StackPane stackPane = new StackPane();
+     /*File[] drives = File.listRoots();
+     for (File file : drives) {
+            
+     }
+     treeViewLoad(new File("D:\\"), null);
+     stackPane.getChildren().add(treeViewFile);
+     return stackPane;
+     }
+
+    
+     private void treeViewLoad(File dir, TreeItem<File> parent) throws IOException {
+     String[] extensions = new String[]{"mp3"};
+     TreeItem<File> root = new TreeItem<>(dir);
+     root.setExpanded(true);
+     dir.getCanonicalPath();
+     List<File> files = (List<File>) FileUtils.listFiles(dir, extensions, true);
+     }
+     */

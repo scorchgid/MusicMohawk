@@ -10,7 +10,6 @@
  */
 package musicmetadatak1009705;
 
-import Testing.TestMain;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
@@ -21,67 +20,51 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 /**
  *
  * @author Scorchgid
  */
-public class Main {
+public class Main  {
+
+    //Stage mainWindow;
+    //Scene scene;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        if (!alphaFX(args)) {
+            OmegaConsole.omegaConsole();
+        }
+    }
+
+    public static boolean alphaFX(String[] args) {
         try {
-            MainView.launch(args);
+            MainView.launch();
         } catch (Exception e) {
             System.err.println("GUI Failed Switching to command line\n"
                     + e.toString());
-            omegaConsole();
+            return false;
         }
+        return true;
+    }
+/*
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        mainWindow = primaryStage;
+        GridPane grid = new GridPane();
+        grid.setHgap(8);
+        grid.setVgap(8);
+        grid.setPadding(new Insets(5));
     }
 
-    /**
-     * When all else fails..
-     */
-    public static void omegaConsole() {
-        int x = 0;
-        Scanner scan = new Scanner(System.in);
-        String shownline;
-        System.out.println("Welcome to Media Mohawk - Ω Command Line Mode (Ω_CLM)\nThe following drive are avliable");
-        File[] drives = File.listRoots();
-        for (File file : drives) {
-            System.out.println(file.toString());
-        }
-        System.out.println("Which Drive should I search? ");
-        shownline = scan.nextLine();
-        aVAJAVAFileMp3Scan(new File(shownline));
-
-        while (x == 0) {
-            System.out.println("Please enter the full File path of the MP3 File you wish to edit");
-            shownline = scan.nextLine();
-            {
-                try {
-                    MusicDataModel reader = new MusicDataModel(shownline);
-                    System.out.println("The following is a list of metadata for this file: \n"
-                            + "Track: " + reader.getTrack()
-                            + "\nTitle: " + reader.getTitle()
-                            + "\nLength " + reader.getLength()
-                            + "\nArtist " + reader.getArtist()
-                            + "\nAlbum " + reader.getAlbum()
-                            + "\nGenre " + reader.getGenre()
-                            + "\nYear " + reader.getYear()
-                            + "\nComment " + reader.getComment()
-                    );
-                } catch (UnsupportedTagException | InvalidDataException | IOException | NotSupportedException ex) {
-                    System.err.println("The file you have entered could not be found, exception thrown, please run this file again.");
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        }
-    }
-
+*/
     public static void aVAJAVAFileMp3Scan(File dir) {
         try {
             String[] extensions = new String[]{"mp3"};

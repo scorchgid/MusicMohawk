@@ -7,6 +7,7 @@ package musicmetadatak1009705;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.StackPane;
 import javafx.application.Application;
@@ -31,6 +32,7 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
  */
 public class FolderTreeView {
 
+    int x = 0;
     private MainView mainView;
     private TreeView<File> treeViewFile = new TreeView<>();
     TreeItem<File> root = new TreeItem<>();
@@ -44,22 +46,27 @@ public class FolderTreeView {
     }
 
     public VBox treeStack() throws IOException {
-        StackPane stackPane = new StackPane();
         VBox vbox = new VBox();
-
-        TreeView treeView = new TreeView<File>(root);
         File[] drives = File.listRoots();
+        ArrayList<TreeItem> treeItems = new ArrayList<>();
         for (File dir : drives) {
-            root = createNode(dir);
+            treeItems.add(createNode(dir));
         }
-
-        //File fileD = new File("D:\\");
-        //root = new TreeItem<>(fileD);
-        //oldeTreeViewLoad(fileD, root);
-        root.setExpanded(true);
-        //stackPane.getChildren().add(treeView);
-        vbox.getChildren().add(treeView);
+        TreeView<File> tree = proxyCreateNode(treeItems);
+        vbox.getChildren().add(tree);
         return vbox;
+    }
+
+    // http://stackoverflow.com/questions/22260032/set-two-root-nodes-for-treeview
+    public TreeView<File> proxyCreateNode(ArrayList<TreeItem> arrayListTreeItem) {
+        TreeItem<File> proxyItem = new TreeItem<>();
+        proxyItem.setExpanded(true);
+        for (TreeItem<File> item : arrayListTreeItem) {
+            proxyItem.getChildren().addAll(item);
+        }
+        TreeView<File> tree = new TreeView<>(proxyItem);
+        tree.setShowRoot(false);
+        return tree;
     }
 
     /*    @Override

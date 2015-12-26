@@ -31,6 +31,37 @@ public class JavaFXTreeView extends Application {
         System.out.println("Launch");
         launch(args);
     }
+
+    @Override
+    public void start(Stage stage) {
+        Scene scene = new Scene(new Group(), 300, 300);
+        VBox vbox = new VBox();
+        File[] drives = File.listRoots();
+        ArrayList<TreeItem> treeItems = new ArrayList<>();
+        for (File dir : drives) {
+            treeItems.add(createNode(dir));
+        }
+        TreeView<File> tree = proxyCreateNode(treeItems);
+        vbox.getChildren().add(tree);
+
+        System.out.println("Group scene getChildren add vbox");
+        ((Group) scene.getRoot()).getChildren().add(vbox);
+        System.out.println("Set the scene");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    // http://stackoverflow.com/questions/22260032/set-two-root-nodes-for-treeview
+    public TreeView<File> proxyCreateNode(ArrayList<TreeItem> arrayListTreeItem) {
+        TreeItem<File> proxyItem = new TreeItem<>();
+        for (TreeItem<File> item : arrayListTreeItem) {
+            proxyItem.getChildren().addAll(item);
+        }
+        TreeView<File> tree = new TreeView<>(proxyItem);
+        tree.setShowRoot(false);
+        return tree;
+    }
+
     int x = 0;
 
     private TreeItem<File> createNode(final File f) {
@@ -87,45 +118,5 @@ public class JavaFXTreeView extends Application {
                 return FXCollections.emptyObservableList();
             }
         };
-    }
-
-    public TreeView<File> proxyCreateNode(ArrayList<TreeItem> arrayListTreeItem) {
-        TreeItem<File> proxyItem = new TreeItem<>();
-        for (TreeItem<File> item : arrayListTreeItem) {
-            proxyItem.getChildren().addAll(item);
-        }
-        //proxyItem.getChildren().addAll(arrayListTreeItem);
-        TreeView<File> tree = new TreeView<>(proxyItem);
-        tree.setShowRoot(false);
-        return tree;
-    }
-
-    @Override
-    public void start(Stage stage) {
-        Scene scene = new Scene(new Group(), 300, 300);
-        VBox vbox = new VBox();
-        File[] drives = File.listRoots();
-        ArrayList<TreeItem> treeItems = new ArrayList<>();
-        /*        File[] drives = File.listRoots();
-         for (File dir : drives) {
-         TreeItem<File> root = createNode(dir);
-         System.out.println("Finished Root, creating instance of treeView");
-         TreeView treeView = new TreeView<File>(root); 
-         vbox.getChildren().add(treeView);
-         }*/
-        for (File dir : drives) {
-            treeItems.add(createNode(dir));
-        }
-//        TreeItem<File> rootA = createNode(new File("C:\\"));
-        //      TreeItem<File> rootB = createNode(new File("D:\\"));
-
-        TreeView<File> tree = proxyCreateNode(treeItems);
-        vbox.getChildren().add(tree);
-
-        System.out.println("Group scene getChildren add vbox");
-        ((Group) scene.getRoot()).getChildren().add(vbox);
-        System.out.println("Set the scene");
-        stage.setScene(scene);
-        stage.show();
     }
 }

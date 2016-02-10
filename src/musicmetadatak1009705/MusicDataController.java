@@ -27,12 +27,7 @@ public class MusicDataController {
         //this.musicData = new MusicDataModel(dummyFile);
         this.musicData = musicData;
         this.musicView = musicView;
-        
-        
-        
         //StringProperty track = new SimpleStringProperty
-        
-
     }
 
     public MusicDataModel getMusicData() {
@@ -117,9 +112,6 @@ public class MusicDataController {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
-
-
 
 Listners need to go here
  Questions?

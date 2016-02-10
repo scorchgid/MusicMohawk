@@ -18,6 +18,7 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,7 +31,7 @@ public class MusicDataModel {
 //I want to bind whatever is on this side to FXMusicDataPane, it changes when I add shit
     //so where are the properties going again
     Mp3File mp3file;
-    private String mP3FileName, track, title, artist, album, year, genre, comment;
+    private String mP3FileName, track, title, artist, album, year, genre, comment, orginalFileName;
     private long length;
 
     public String getmP3FileName() {
@@ -128,7 +129,7 @@ public class MusicDataModel {
         System.out.println("Load 1");
         mp3file = new Mp3File(fileName);
         mP3FileName = fileName;
-
+        orginalFileName = mP3FileName;
         if (mp3file.hasId3v2Tag()) {
             System.out.println("Load 2 ID3v2Tag");
             ID3v2 id3v2Tag = mp3file.getId3v2Tag();
@@ -167,7 +168,12 @@ public class MusicDataModel {
     public void MP3SaveFile() {
         try {
             System.out.println("Attemping Save");
-            mp3file.save(mP3FileName);
+            String fileName1 = mP3FileName + ".new";
+            mp3file.save(fileName1);
+            File file1 = new File(fileName1);
+            File file2 = new File(orginalFileName);
+            file2.delete();
+            file1.renameTo(file2);            
             System.out.println("Save complete " + mp3file.getFilename());
         } catch (IOException | NotSupportedException ex) {
             Logger.getLogger(MusicDataModel.class.getName()).log(Level.SEVERE, null, ex);

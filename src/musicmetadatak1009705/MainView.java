@@ -9,7 +9,11 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -26,11 +30,11 @@ import javafx.stage.Stage;
 public final class MainView extends Application implements EventHandler<ActionEvent> {
 
     Stage mainWindow;
-
     Scene scene;
     MusicDataModel musicDataModel;
     MusicDataView musicDataView;
     FolderTreeView folderTreeView;
+    FileTreeView fileTreeView;
 
     public Stage getMainWindow() {
         return mainWindow;
@@ -47,40 +51,50 @@ public final class MainView extends Application implements EventHandler<ActionEv
     public void setScene(Scene scene) {
         this.scene = scene;
     }
-    
+
     public boolean MainView() {
         try {
             start(mainWindow);
         } catch (Exception ex) {
-            System.err.println(ex.toString());
-            //Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Main View Exeception\r\n" + ex.toString());
             return false;
-
         }
         return true;
     }
 
-    private Scene mainView() throws UnsupportedTagException, InvalidDataException, IOException, NotSupportedException {
+    private Scene mainView() {
+        try {
+            /* File Tree */
+            this.fileTreeView = new FileTreeView();
 
-        /* Folder Tree*/
-        folderTreeView = new FolderTreeView();
+            /* Folder Tree */
+            folderTreeView = new FolderTreeView(fileTreeView);
+            
+            /* Music Metadata Pane */
+            musicDataModel = new MusicDataModel("D:\\K3NoteBackup\\SD Card\\Music\\Singers\\The Arka Teks\\Evolver\\02  Mr. Jekyl Hyde.mp3");
 
-        /* Music Metadata Pane */
-        musicDataModel = new MusicDataModel("D:\\K3NoteBackup\\SD Card\\Music\\Singers\\The Arka Teks\\Evolver\\02  Mr. Jekyl Hyde.mp3");
+            /// This line is causing the exception. Are the objects working together with each other as they should.
+            musicDataView = new MusicDataView(musicDataModel, this);
 
-        /// This line is causing the exception. Are the objects working together with each other as they should.
-        musicDataView = new MusicDataView(musicDataModel, this);
+            GridPane grid = new GridPane();
+            grid.setHgap(8);
+            grid.setVgap(8);
+            grid.setPadding(new Insets(6));
+            
+            grid.addColumn(0, folderTreeView.treeStack());
+            grid.addColumn(1, fileTreeView.listStack("D:\\K3NoteBackup\\SD Card\\Music\\Singers\\The Arka Teks\\Evolver\\"));
+            grid.addColumn(2, musicDataView.grid());
 
-        GridPane grid = new GridPane();
-        grid.setHgap(8);
-        grid.setVgap(8);
-        grid.setPadding(new Insets(5));
-
-        grid.addColumn(0,folderTreeView.treeStack());
-        grid.addColumn(1, musicDataView.grid());
-
-        Scene sceneMainView = new Scene(grid);
-        return sceneMainView;
+            Platform.runLater(() -> {
+                fileTreeView.getListView().refresh();
+            });
+            
+            Scene sceneMainView = new Scene(grid);
+            return sceneMainView;
+        } catch (UnsupportedTagException | InvalidDataException | IOException | NotSupportedException ex) {
+            System.err.println("Excepion\r\n " + ex.toString());
+        }
+        return null;
     }
 
     /**
@@ -91,7 +105,6 @@ public final class MainView extends Application implements EventHandler<ActionEv
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        /* Main window setup */
         mainWindow = primaryStage;
         mainWindow.setScene(mainView());
         mainWindow.setMinHeight(550);
@@ -99,6 +112,7 @@ public final class MainView extends Application implements EventHandler<ActionEv
         mainWindow.setTitle("Music Mohawk");
         mainWindow.show();
     }
+    
     /*
      public void Close() {
      mainWindow.setOnCloseRequest(e -> {
@@ -109,10 +123,11 @@ public final class MainView extends Application implements EventHandler<ActionEv
      }
      public void closeProgram() {
      mainWindow.close();
-     }
-     */
+     }*/
+     
 
     @Override
     public void handle(ActionEvent event) {
+        
     }
 }

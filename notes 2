@@ -1,0 +1,12 @@
+Make a list of all paths which have an mp3 file within them
+Then go through that list
+
+So consider the alternative take the finished list go through and erase non needed directories. Question how could you possibly do that.
+Go into each directory and check if there's a file
+Well what if it's several chains down. It becomes a mess, there's little you can do to sort that.
+There's got to be a way I can make this work but I'm not sure where to start.
+
+We could go back to the first idea, pass a list of directories to search,
+You are passing it to a system which you do not understand how it acts, it runs it's method against it self over and over.
+
+You need to fix file util it is not returning a list of files as it was before

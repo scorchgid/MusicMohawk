@@ -7,12 +7,16 @@ package TestingNonApplication;
 
 import Testing.TestMain;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -26,11 +30,21 @@ public class TestMainNonApp {
      * without a forced close. This was the only was to do so
      *
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //outputTestFileScan();
         //testListRoots();
-        stackOverflowFileMp3Scan(new File("D:\\"));
+        //stackOverflowFileMp3Scan(new File("D:\\"));
+        //testSpotifyClass();
+        File[] find = finder("D:\\K3NoteBackup 2\\Music\\DDR");
+        for (File fi : find){
+            System.out.println(fi.toString());
+        }
+    }
+ 
+    public static void testSpotifyClass() {
+        //   JSpotModel jSpot = new JSpotModel("Now that's what I call music");
     }
 
     public static void testListRoots() {
@@ -123,8 +137,7 @@ public class TestMainNonApp {
         File[] drives = File.listRoots();
         List<File> files = hyperAVAJAVAFileMp3Scan(drives[1]);
         List<File> files2 = hammerBack(files);
-        for(File file :files2)
-        {
+        for (File file : files2) {
             System.out.println(file.toString());
         }
         /*for (File file : drives) {
@@ -189,10 +202,39 @@ public class TestMainNonApp {
     public static List<File> hammerBack(List<File> files) {
         List<File> returnedList = null;
         /*for (File file : files) {
-            String stringFile = file.toString();
-            stringFile = stringFile.substring(0, stringFile.lastIndexOf("\\"));
-            returnedList.add(new File(stringFile));
-        }*/
+         String stringFile = file.toString();
+         stringFile = stringFile.substring(0, stringFile.lastIndexOf("\\"));
+         returnedList.add(new File(stringFile));
+         }*/
         return returnedList;
+    }
+    /*
+     public static void listtingFilesNew() throws IOException {
+     List<String> list = (Files.walk(Paths.get("C:\\ygopro-1.033.0V2.1Percy-full"))
+     .filter(Files::isRegularFile)
+     .collect(Collectors.toList()));
+     for (File it : list) {
+     System.out.println(it);
+     }
+     }*/
+
+    public static void listFilesForFolder(File folder) {
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                TestMainNonApp.listFilesForFolder(fileEntry);
+            } else {
+                System.out.println(fileEntry.getName());
+            }
+        }
+        //File dir = new File(xmlFilesDirectory);
+        //File[] files = dir.listFiles((d, name) -> name.endsWith(".xml"));
+    }
+
+    final File folder = new File("D:\\K3NoteBackup 2\\Music\\DDR");
+
+// listFilesForFolder(folder);
+    public static File[] finder(String dirName) {
+        File dir = new File(dirName);
+        return dir.listFiles((File dir1, String filename) -> filename.endsWith(".mp3"));
     }
 }

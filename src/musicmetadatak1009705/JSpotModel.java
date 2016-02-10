@@ -6,7 +6,7 @@
 package musicmetadatak1009705;
 
 
-import com.google.code.jspot.*;
+//import com.google.code.jspot.*;
 import java.io.IOException;
 
 /**
@@ -17,8 +17,8 @@ public class JSpotModel {
 
     
     public JSpotModel(MusicDataModel model) throws IOException {
-        Spotify spotify = new Spotify();
-        spotify.searchAlbum(model.getAlbum());
+        //Spotify spotify = new Spotify();
+        //spotify.searchAlbum(model.getAlbum());
         
         
         
